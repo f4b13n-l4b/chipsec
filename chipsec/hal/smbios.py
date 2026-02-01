@@ -239,7 +239,7 @@ class SMBIOS(hal_base.HALBase):
         try:
             header = SMBIOS_STRUCT_HEADER(*struct.unpack_from(SMBIOS_STRUCT_HEADER_FMT,
                                                               table[start_offset:start_offset + SMBIOS_STRUCT_HEADER_SIZE]))
-        except:
+        except struct.error:
             logger().log_hal('- Unable to unpack data')
             return (None, None)
         str_offset = start_offset + header.Length
@@ -271,8 +271,8 @@ class SMBIOS(hal_base.HALBase):
             logger().log_hal(f'Validating 32bit SMBIOS header @ 0x{pa:08X}')
             mem_buffer = self.cs.mem.read_physical_mem(pa, SMBIOS_2_x_ENTRY_POINT_SIZE)
             ep_data = SMBIOS_2_x_ENTRY_POINT(*struct.unpack_from(SMBIOS_2_x_ENTRY_POINT_FMT, mem_buffer))
-        except:
-            logger().log_hal('- Memory read failed')
+        except (struct.error, TypeError) as e:
+            logger().log_hal(f'- Memory read failed: {e}')
             return None
         if ep_data.Anchor != SMBIOS_2_x_SIG:
             logger().log_hal('- Invalid signature')
@@ -295,8 +295,8 @@ class SMBIOS(hal_base.HALBase):
             logger().log_hal(f'Validating 64bit SMBIOS header @ 0x{pa:08X}')
             mem_buffer = self.cs.mem.read_physical_mem(pa, SMBIOS_3_x_ENTRY_POINT_SIZE)
             ep_data = SMBIOS_3_x_ENTRY_POINT(*struct.unpack_from(SMBIOS_3_x_ENTRY_POINT_FMT, mem_buffer))
-        except:
-            logger().log_hal('- Memory read failed')
+        except (struct.error, TypeError) as e:
+            logger().log_hal(f'- Memory read failed: {e}')
             return None
         if ep_data.Anchor != SMBIOS_3_x_SIG:
             logger().log_hal('- Invalid signature')
@@ -428,7 +428,7 @@ class SMBIOS(hal_base.HALBase):
 
         try:
             header = SMBIOS_STRUCT_HEADER(*struct.unpack_from(SMBIOS_STRUCT_HEADER_FMT, raw_data[:SMBIOS_STRUCT_HEADER_SIZE]))
-        except:
+        except struct.error:
             logger().log_hal('- Failed to extract information from raw data')
             return None
 
@@ -491,7 +491,7 @@ class SMBIOS(hal_base.HALBase):
             tmp_decode = struct_decode_tree[header.Type]
             try:
                 decode_data = struct.unpack_from(tmp_decode['format'], data)
-            except:
+            except struct.error:
                 logger().log_hal('- Could not decode structure')
                 continue
             if decode_data is None:
@@ -504,7 +504,7 @@ class SMBIOS(hal_base.HALBase):
             # Create the actual object
             try:
                 decode_object = tmp_decode['class'](*decode_data)
-            except:
+            except (TypeError, ValueError):
                 logger().log_hal('- Failed to create structure')
                 continue
             ret_val.append(decode_object)
