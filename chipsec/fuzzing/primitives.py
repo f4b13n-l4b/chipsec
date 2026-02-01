@@ -507,16 +507,13 @@ class string(base_primitive):
 
             # if the optional file '.fuzz_strings' is found, parse each line as a new entry for the fuzz library.
             try:
-                fh = open(".fuzz_strings", "r")
+                with open(".fuzz_strings", "r") as fh:
+                    for fuzz_string in fh.readlines():
+                        fuzz_string = fuzz_string.rstrip("\r\n")
 
-                for fuzz_string in fh.readlines():
-                    fuzz_string = fuzz_string.rstrip("\r\n")
-
-                    if fuzz_string != "":
-                        string.fuzz_library.append(fuzz_string)
-
-                fh.close()
-            except:
+                        if fuzz_string != "":
+                            string.fuzz_library.append(fuzz_string)
+            except OSError:
                 pass
 
         # delete strings which length is greater than max_len.
@@ -603,7 +600,7 @@ class string(base_primitive):
         # try to encode the string properly and fall back to the default value on failure.
         try:
             self.rendered = str(self.value).encode(self.encoding)
-        except:
+        except (UnicodeEncodeError, LookupError):
             self.rendered = str(self.value).encode('latin-1')
 
         return self.rendered
@@ -681,20 +678,17 @@ class bit_field(base_primitive):
 
         # if the optional file '.fuzz_ints' is found, parse each line as a new entry for the fuzz library.
         try:
-            fh = open(".fuzz_ints", "r")
+            with open(".fuzz_ints", "r") as fh:
+                for fuzz_int in fh.readlines():
+                    # convert the line into an integer, continue on failure.
+                    try:
+                        fuzz_int = int(fuzz_int, 16)
+                    except ValueError:
+                        continue
 
-            for fuzz_int in fh.readlines():
-                # convert the line into an integer, continue on failure.
-                try:
-                    fuzz_int = int(fuzz_int, 16)
-                except:
-                    continue
-
-                if fuzz_int < self.max_num:
-                    self.fuzz_library.append(fuzz_int)
-
-            fh.close()
-        except:
+                    if fuzz_int < self.max_num:
+                        self.fuzz_library.append(fuzz_int)
+        except OSError:
             pass
 
     def add_integer_boundaries(self, integer):

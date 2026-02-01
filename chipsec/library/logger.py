@@ -301,7 +301,10 @@ class Logger:
         while self.chipsecLogger.filters:
             self.chipsecLogger.removeFilter(self.chipsecLogger.filters[0])
         while self.chipsecLogger.handlers:
-            self.chipsecLogger.removeHandler(self.chipsecLogger.handlers[0])
+            handler = self.chipsecLogger.handlers[0]
+            self.chipsecLogger.removeHandler(handler)
+            if hasattr(handler, 'close'):
+                handler.close()
 
     def disable(self) -> None:
         """Disables the logging to file and closes the file if any."""
