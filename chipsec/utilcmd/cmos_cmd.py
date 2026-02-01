@@ -81,7 +81,7 @@ class CMOSCommand(BaseCommand):
         self.logger.log(f'[CHIPSEC] CMOS low byte 0x{self.offset:X} = 0x{val:X}')
 
     def cmos_writel(self) -> None:
-        val = self._cmos.write_cmos_low(self.offset, self.value)
+        _val = self._cmos.write_cmos_low(self.offset, self.value)
         self.logger.log(f'[CHIPSEC] CMOS low byte 0x{self.offset:X} = 0x{self.value:X}')
 
     def cmos_readh(self) -> None:
