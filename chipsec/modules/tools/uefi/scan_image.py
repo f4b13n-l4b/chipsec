@@ -90,7 +90,7 @@ class scan_image(BaseModule):
     #
     def genlist_callback(self, efi_module: EFI_MODULE) -> None:
         md = {}
-        if type(efi_module) == EFI_SECTION:
+        if isinstance(efi_module, EFI_SECTION):
             if efi_module.SHA1:
                 md["sha1"] = efi_module.SHA1
             if efi_module.parentGuid:

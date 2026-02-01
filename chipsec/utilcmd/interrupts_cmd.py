@@ -138,7 +138,7 @@ class SMICommand(BaseCommand):
             self.logger.log(f'          RSI: 0x{self._rsi:016X}')
             self.logger.log(f'          RDI: 0x{self._rdi:016X}')
             ret = self.interrupts.send_SW_SMI(self.thread_id, self.SMI_code_port_value, self.SMI_data_port_value, self._rax, self._rbx, self._rcx, self._rdx, self._rsi, self._rdi)
-            if not ret is None:
+            if ret is not None:
                 self.logger.log("Return values")
                 self.logger.log(f'          RAX: {ret[1]:16X}')
                 self.logger.log(f'          RBX: {ret[2]:16X}')

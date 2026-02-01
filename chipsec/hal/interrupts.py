@@ -105,7 +105,7 @@ class Interrupts(hal_base.HALBase):
         # } EFI_SMM_COMMUNICATE_HEADER;
         _guid = uuid.UUID(guid).bytes_le
         data_hdr = _guid + struct.pack("Q", len(data)) + data
-        if not invoc_reg is None:
+        if invoc_reg is not None:
             # need to write data_hdr to comm buffer
             self.cs.helper.write_phys_mem(buf_addr, len(data_hdr), data_hdr)
             # USING GAS need to write buf_addr into invoc_reg

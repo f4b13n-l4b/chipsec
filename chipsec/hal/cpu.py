@@ -110,7 +110,7 @@ class CPU(hal_base.HALBase):
             _, APIC_object, _, _ = apic
             for structure in APIC_object.apic_structs:
                 if 0x00 == structure.Type:
-                    if not structure.ACICID in dACPIID:
+                    if structure.ACICID not in dACPIID:
                         if 1 == structure.Flags:
                             dACPIID[structure.APICID] = structure.ACPIProcID
         return len(dACPIID)
