@@ -111,7 +111,7 @@ class EfiHelper(Helper):
 
     def write_phys_mem(self, phys_address: int, length: int, buf: bytes) -> int:
         pa_lo, pa_hi = self.split_address(phys_address)
-        if type(buf) == bytearray:
+        if isinstance(buf, bytearray):
             buf = bytes(buf)
         if 4 == length:
             dword_value = struct.unpack('I', buf)[0]

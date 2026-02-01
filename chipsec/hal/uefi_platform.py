@@ -959,7 +959,7 @@ def decode_s3bs_opcode_def(data):
     opcode, = struct.unpack('<B', data[: 1])
     try:
         logger().log_hal(script_opcodes[opcode])
-    except:
+    except KeyError:
         pass
     if S3BootScriptOpcode_MDE.EFI_BOOT_SCRIPT_IO_WRITE_OPCODE == opcode:
         frmt = '<BBHIQ'
@@ -1092,7 +1092,7 @@ def decode_s3bs_opcode_edkcompat(data: bytes):
     opcode_data = data[header_size:]
     try:
         logger().log_hal(script_opcodes[opcode])
-    except:
+    except KeyError:
         pass
 
     if S3BootScriptOpcode_EdkCompat.EFI_BOOT_SCRIPT_IO_WRITE_OPCODE == opcode or \

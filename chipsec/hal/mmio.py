@@ -404,8 +404,8 @@ class MMIO(hal_base.HALBase):
                 bus = self.cs.device.get_first(bus)
                 try:
                     (_base, _size) = self.get_MMIO_BAR_base_address(_bar_name, bus)
-                except:
-                    self.logger.log_hal(f'Unable to find MMIO BAR {_bar}')
+                except (KeyError, ValueError, struct.error) as e:
+                    self.logger.log_hal(f'Unable to find MMIO BAR {_bar}: {e}')
                     continue
                 _en = self.is_MMIO_BAR_enabled(_bar_name)
 

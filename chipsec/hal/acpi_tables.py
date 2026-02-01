@@ -1039,7 +1039,7 @@ class EINJ (ACPI_TABLE):
         instruction = struct.unpack('<B', table_content[1:2])[0]
         flags = struct.unpack('<B', table_content[2:3])[0]
         reserved = struct.unpack('<B', table_content[3:4])[0]
-        injectionHeaderSz = struct.unpack('<L', table_content[0:4])[0]
+        _injectionHeaderSz = struct.unpack('<L', table_content[0:4])[0]
         registerRegion = self.parseAddress(table_content[4:16])
         value = struct.unpack('<Q', table_content[16:24])[0]
         mask = struct.unpack('<Q', table_content[24:32])[0]
@@ -1224,7 +1224,7 @@ class HEST (ACPI_TABLE):
         pollInterval = struct.unpack('<L', table_content[4:8])[0]
         vector = struct.unpack('<L', table_content[8:12])[0]
         switchPollingThreshVal = struct.unpack('<L', table_content[12:16])[0]
-        switchPollThresWind = struct.unpack('<L', table_content[16:20])[0]
+        _switchPollThresWind = struct.unpack('<L', table_content[16:20])[0]
         errThreshVal = struct.unpack('<L', table_content[20:24])[0]
         errThreshWind = struct.unpack('<L', table_content[24:28])[0]
 
@@ -1319,7 +1319,7 @@ class HEST (ACPI_TABLE):
         recordsToPreAllocate = struct.unpack('<L', table_content[8:12])[0]
         maxSectorsPerRecord = struct.unpack('<L', table_content[12:16])[0]
         globalCapabilityInitData = struct.unpack('<Q', table_content[16:24])[0]
-        globalControlInitData = struct.unpack('<Q', table_content[24:32])[0]
+        _globalControlInitData = struct.unpack('<Q', table_content[24:32])[0]
         numHardwareBanks = struct.unpack('<B', table_content[32:33])[0]
         reserved2_1 = struct.unpack('<B', table_content[33:34])[0]
         reserved2_2 = struct.unpack('<B', table_content[34:35])[0]
@@ -1956,11 +1956,11 @@ class NFIT (ACPI_TABLE):
 '''
 
     def smbiosManagementInfo(self, tableLen: int, table_content: bytes) -> str:
-        smbios_tables = ['BIOS Information', 'System Information', 'Baseboard (or Module) Information', 'System Enclosure or Chassis', 'Processor Information', 'Memory Controller Information, obsolete', 'Memory Module Information, obsolete', 'Cache Information', 'Port Connector Information', 'System Slots', 'On Board Devices Information, obsolete', 'OEM Strings', 'System Confirguration Options', 'BIOS Language Information', 'Group Associations', 'System Event Log', 'Physical Memory Array', 'Memory Device', '32-Bit Memory Error Information', 'Memory Array Mapped Address', 'Memory Device Mapped Address',
+        _smbios_tables = ['BIOS Information', 'System Information', 'Baseboard (or Module) Information', 'System Enclosure or Chassis', 'Processor Information', 'Memory Controller Information, obsolete', 'Memory Module Information, obsolete', 'Cache Information', 'Port Connector Information', 'System Slots', 'On Board Devices Information, obsolete', 'OEM Strings', 'System Confirguration Options', 'BIOS Language Information', 'Group Associations', 'System Event Log', 'Physical Memory Array', 'Memory Device', '32-Bit Memory Error Information', 'Memory Array Mapped Address', 'Memory Device Mapped Address',
                          'Built-in Pointing Device', 'Portable Battery', 'System Reset', 'Hardware Security', 'System Power Controls', 'Voltage Probe', 'Cooling Device', 'Temperature Probe', 'Electrical Current Probe', 'Out-of-Band Remote Address', 'Boot Integrity Services (BIS) Entry Point', 'System Boot Information', '64-Bit Mmemory Error Information', 'Management Device', 'Management Device Component', 'Management Device Threshold Data', 'Memory Channel', 'IPMI Device Information', 'System Power Supply', 'Additional Information', 'Onboard Devices Extended Information', 'Mangement Controller Host Interface']
         reserved = struct.unpack('<L', table_content[4:8])[0]
-        curPos = 8
-        dataStr = ''
+        _curPos = 8
+        _dataStr = ''
         return f'''
     SMBIOS Management Information Structure [Type 3]
       Length                                                      : 0x{tableLen:04X} ( {tableLen:d} bytes )
@@ -1969,7 +1969,7 @@ class NFIT (ACPI_TABLE):
 '''  # TODO
 
     def interleave(self, tableLen: int, table_content: bytes) -> Tuple[int, str]:
-        interleaveStructureIndex = struct.unpack('<H', table_content[4:6])[0]
+        _interleaveStructureIndex = struct.unpack('<H', table_content[4:6])[0]
         reserved = struct.unpack('<H', table_content[6:8])[0]
         numLinesDescribed = struct.unpack('<L', table_content[8:12])[0]
         lineSz = struct.unpack('<L', table_content[12:16])[0]

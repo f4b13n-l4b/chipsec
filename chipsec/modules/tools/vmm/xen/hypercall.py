@@ -128,7 +128,7 @@ class XenHypercall(BaseModuleHwAccess):
             info['features'] = {}
             for i in range(0x100):
                 feature = self.xen_version(XENVER_GET_FEATURES, 8, struct.pack('<LL', i, 0))
-                if feature['exception'] == False:
+                if not feature['exception']:
                     values = struct.unpack('<LL', feature['buffer'])
                     info['features'][values[0]] = values[1]
 
@@ -157,7 +157,7 @@ class XenHypercall(BaseModuleHwAccess):
         for vector in vector_list:
             args = self.hypercall_args.get(vector, {}).get('args', [])
             result = self.hypercall([vector] + [0 for a in args])
-            if (result['exception'] == False) and (result['status'] != get_invalid_hypercall_code()):
+            if (not result['exception']) and (result['status'] != get_invalid_hypercall_code()):
                 self.hypercalls[vector] = result
                 self.add_initial_data(vector, result['buffer'], get_hypercall_status(result['status'], True))
         return

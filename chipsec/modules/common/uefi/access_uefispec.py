@@ -208,7 +208,7 @@ class access_uefispec(BaseModule):
                         self.result.setStatusBit(self.result.status.VERIFY)
 
                 if do_modify:
-                    if attribute != None:
+                    if attribute is not None:
                         attrs = attribute
 
                     self.logger.log(f"[*] Testing modification of {name} with attribute {str(attrs)}..")
